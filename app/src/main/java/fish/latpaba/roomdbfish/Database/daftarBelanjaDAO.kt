@@ -17,6 +17,11 @@ interface daftarBelanjaDAO {
     )
     fun update(isi_tanggal: String, isi_item: String, isi_jumlah: String, pilihId: Int)
 
+    @Query("SELECT * FROM DAFTARBELANJA WHERE status = 0 ORDER BY id ASC")
+    fun selectALLNoFav(): MutableList<daftarBelanja>
+    @Query("SELECT * FROM DAFTARBELANJA WHERE status = 1 ORDER BY id ASC")
+    fun selectALLFav(): MutableList<daftarBelanja>
+
     @Delete
     fun delete(daftar: daftarBelanja)
 
