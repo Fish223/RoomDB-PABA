@@ -62,13 +62,16 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun loadData() {
+        // Pastikan query dilakukan di background thread
         CoroutineScope(Dispatchers.IO).launch {
             val daftarBelanja = DB.funDaftarBelanjaDAO().selectAll()
             withContext(Dispatchers.Main) {
+                // Menampilkan data di UI setelah query selesai
                 adapterDaftar.isiData(daftarBelanja)
             }
         }
     }
+
 
     private fun markAsCompleted(item: Any) {
         CoroutineScope(Dispatchers.IO).launch {
@@ -83,16 +86,17 @@ class MainActivity : AppCompatActivity() {
                         jumlah = item.jumlah?.toIntOrNull() ?: 0,
                         tanggalSelesai = item.tanggal ?: "Unknown"
                     )
-                    DB.historyBarangDao().insert(historyItem)
+                    DB.historyBarangDao().insert(historyItem) // Simpan ke tabel historyBarang_DB
                 }
             }
 
             // Muat ulang data RecyclerView
             withContext(Dispatchers.Main) {
-                loadData()
+                loadData() // Memuat data kembali untuk menampilkan hasil terbaru
             }
         }
     }
+
 }
 
 
